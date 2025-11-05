@@ -65,8 +65,21 @@ const BodyCompoment = () => {
     setDetail(item);
   };
 
+  const total = () => {
+    if (!ListCart || ListCart.length === 0) {
+      return 0;
+    }
+
+    const totalSp = ListCart.reduce((total, p) => {
+      return total + p.quantity;
+    }, 0);
+
+    return totalSp;
+  };
+
   return (
     <>
+      <h1>Tổng sản phẩm : {total()}</h1>
       <table class="table">
         <thead>
           <tr>
