@@ -1,14 +1,64 @@
 import React, { useState } from "react";
 import data from "./../../data.json";
 import Child from "./Child";
+import Cart from "./Cart";
 const BodyCompoment = () => {
   const [List, SetList] = useState(data);
   const [ItemDetail, setDetail] = useState(null);
+  const [ListCart, setListCart] = useState([]);
+
+  const AddCart = (item) => {
+    const NewItem = {
+      id: item.id,
+      name: item.name,
+      quantity: 1,
+    };
+
+    const index = ListCart.findIndex((p) => p.id === NewItem.id);
+    console.log(index);
+
+    if (index !== -1) {
+      ListCart[index].quantity += 1;
+      const NewArr = [...ListCart];
+      setListCart(NewArr);
+    } else {
+      const NewArr = [...ListCart, NewItem];
+      setListCart(NewArr);
+    }
+  };
+
   const RenderList = () => {
     const listUI = List.map((p) => {
-      return <Child item={p} setProduct={SetItemDetail} />;
+      return <Child item={p} setProduct={SetItemDetail} BuyItem={AddCart} />;
     });
     return listUI;
+  };
+
+  const ActionCart = (item, isADD) => {
+    const index = ListCart.findIndex((p) => p.id === item.id);
+
+    if (isADD) {
+      ListCart[index].quantity += 1;
+      const NewArr = [...ListCart];
+      setListCart(NewArr);
+    } else {
+      if (ListCart[index].quantity <= 1) {
+        ListCart.splice(index, 1);
+        const NewArr = [...ListCart];
+        setListCart(NewArr);
+      } else {
+        ListCart[index].quantity -= 1;
+        const NewArr = [...ListCart];
+        setListCart(NewArr);
+      }
+    }
+  };
+
+  const RenderListCart = () => {
+    const ListC = ListCart.map((p) => {
+      return <Cart data={p} Action={ActionCart} />;
+    });
+    return ListC;
   };
 
   const SetItemDetail = (item) => {
@@ -17,6 +67,18 @@ const BodyCompoment = () => {
 
   return (
     <>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Số lượng</th>
+            <th scope="col">Handle</th>
+          </tr>
+        </thead>
+        <tbody>{RenderListCart()}</tbody>
+      </table>
+
       {RenderList()}
 
       <div

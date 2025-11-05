@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const Child = (pros) => {
-  const { item, setProduct } = pros;
+  const { item, setProduct, BuyItem } = pros;
 
   const HandleDetail = () => {
     setProduct(item);
@@ -22,6 +22,7 @@ const Child = (pros) => {
         >
           Thông tin
         </button>
+        <button onClick={() => BuyItem(item)}>Mua</button>
       </div>
     </div>
   );
